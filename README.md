@@ -1,0 +1,3 @@
+# Microsecond-Latency Limit Order Book & RL Market Maker
+
+This project implements a high-performance, zero-allocation Limit Order Book (LOB) matching engine in C++17. The engine bypasses OS heap allocation using custom memory pools and cache-aligned structs to achieve microsecond latency. It is exposed to Python via PyBind11, serving as a high-fidelity algorithmic trading environment to train a Proximal Policy Optimization (PPO) Reinforcement Learning agent in market-making and inventory risk management
