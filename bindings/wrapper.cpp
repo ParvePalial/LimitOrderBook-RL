@@ -18,5 +18,10 @@ PYBIND11_MODULE(limit_order_book, m) {
     py::class_<OrderBook, std::shared_ptr<OrderBook>>(m, "OrderBook")
         .def(py::init<std::shared_ptr<MemoryPool>>(), py::arg("pool"))
         .def("add_order", &OrderBook::add_order, 
-             py::arg("id"), py::arg("price"), py::arg("quantity"), py::arg("side"));
+             py::arg("id"), py::arg("price"), py::arg("quantity"), py::arg("side"))
+        .def("clear_price_level", &OrderBook::clear_price_level, 
+             py::arg("price"), py::arg("side")) // EXPOSED FOR LIVE/HISTORICAL DATA
+        .def("get_best_bid", &OrderBook::get_best_bid)
+        .def("get_best_ask", &OrderBook::get_best_ask)
+        .def("reset", &OrderBook::reset);
 }

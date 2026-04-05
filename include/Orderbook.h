@@ -131,4 +131,47 @@ public:
         }
         memory_pool->deallocate(order);
     }
+
+    uint64_t get_best_bid(){
+        return bids.empty() ? 0: bids.begin()->first;
+    }
+
+    uint64_t get_best_ask(){
+        return asks.empty()? 0: asks.begin()->first;
+    }
+
+    void reset(){
+        bids.clear();
+        asks.clear();
+    }
+
+    // Used for Live WebSocket Feeds when an exchange sends Qty = 0
+    void clear_price_level(uint64_t price, Side side){
+        if (side==Side::BUY){
+            auto it = bids.find(price);
+            if (it != bids.end()){
+                OrderQueue& queue = it->second;
+                Order* current = queue.head;
+                while(current){
+                    Order* next_order = current->next;
+                    memory_pool->deallocate(current);
+                    current = next_order;
+                }
+                bids.erase(it);
+            }
+        }
+        else {
+            auto it = asks.find(price);
+            if (it !=asks.end()){
+                OrderQueue& queue = it->second;
+                Order* current = queue.head;
+                while (current){
+                    Order* next_order = current->next;
+                    memory_pool->deallocate(current);
+                    current = next_order;
+                }
+                asks.erase(it);
+            }
+        }
+    }
 };
